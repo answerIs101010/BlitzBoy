@@ -11,7 +11,7 @@ ROM::ROM(string romPath) {
 }
 
 ROM::~ROM() {
-	delete _header;
+	delete header;
 	delete _fileStream;
 }
 
@@ -23,19 +23,19 @@ bool ROM::loadFile(string path) {
 		char headerBytes[HEADER_LENGTH];
 		fileStream()->getline(headerBytes, HEADER_LENGTH);
 		setHeader(new CartridgeHeader(headerBytes));
-			
+		fileStream()->close();
 	} else {
 		return false;
 	}
 	return true;
 }
 
-CartridgeHeader* ROM::header() {
-	return _header;
+CartridgeHeader* ROM::cartridgeHeader() {
+	return header;
 }
 
-void ROM::setHeader(CartridgeHeader *header) {
-	_header = header;
+void ROM::setHeader(CartridgeHeader *cHeader) {
+	header = cHeader;
 }
 
 ifstream* ROM::fileStream() {

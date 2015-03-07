@@ -9,8 +9,6 @@ CPU::~CPU() {
 }
 
 void CPU::initialize() {
-	_memory = new unsigned char[8192];
-	_videoMemory = new unsigned char[8192];
 	_FR = 0;
 	setRA(0);	
 	setRB(0);	
@@ -22,6 +20,26 @@ void CPU::initialize() {
 	setRL(0);
 	setSP(0xFFFE);
 	setPC(0x100);	
+}
+
+MemoryManagementUnit * CPU::MMU()
+{
+	return _mmu;
+}
+
+void CPU::setMMU(MemoryManagementUnit *mmu)
+{
+	_mmu = mmu;
+}
+
+ROM* CPU::rom()
+{
+	return _rom;
+}
+
+void CPU::setROM(ROM *Rom)
+{
+	_rom = Rom;
 }
 
 inline char CPU::rA() {

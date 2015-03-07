@@ -1,3 +1,5 @@
+#include "memorymanagementunit.h"
+
 /*
  * Class that holds the virtual CPU
  */
@@ -11,6 +13,14 @@ public:
 	// function for variable initialization	
 	void initialize();
 	
+	// Memory Management Unit getter and setter
+	MemoryManagementUnit * MMU();
+	void setMMU(MemoryManagementUnit *mmu);
+
+	// ROM getter and setter
+	ROM* rom();
+	void setROM(ROM *Rom);
+
 	// A register getter and setter
 	char rA();
 	void setRA(unsigned char value);
@@ -70,9 +80,10 @@ public:
 	void setCarryFlag(bool value);
 
 private:
-	// RAM
-	unsigned char *_memory;
-	unsigned char *_videoMemory;
+	// Memory Management Unit
+	MemoryManagementUnit *_mmu;
+	// ROM - Read Only Memory of the game
+	ROM *_rom;
 	// Registers
 	unsigned char _rA;
 	unsigned char _rB;

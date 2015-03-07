@@ -1,13 +1,6 @@
 #include <cstring>
-
-// Length of header areas
-#define HEADER_LENGTH 0x0150
-#define ENTRY_POINT_LENGTH 0x04
-#define NINTENDO_LOGO_LENGTH 0x30
-#define TITLE_LENGTH 0x10
-#define MANUFACTURER_CODE_LENGTH 0x04
-#define NEW_LICENSE_CODE_LENGTH 0x02
-#define GLOBAL_CHECKSUM_LENGTH 0x02
+#include <iostream>
+#include "constants.h"
 
 /*
  * Class that represents the Cartridge Header of a rom
@@ -75,6 +68,7 @@ public:
 	char * globalChecksum();
 	bool setGlobalChecksum(char data[]);
 
+	void printlol();
 private:
 	char _entryPoint[ENTRY_POINT_LENGTH];
 	char _nintendoLogo[NINTENDO_LOGO_LENGTH];
