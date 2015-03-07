@@ -10,7 +10,13 @@ public:
 	CPU();
 	~CPU();
 	
-	// function for variable initialization	
+	// method for emulation  control
+	bool startEmulation();
+	bool pauseEmulation();
+	bool quitEmulation();
+
+
+	// method for variable initialization	
 	void initialize();
 	
 	// Memory Management Unit getter and setter

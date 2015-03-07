@@ -28,6 +28,26 @@
 #define BANDAI_TAMA5 0xFD
 #define HUC3 0xFE
 #define HUC1_RAM_BATTERY 0xFF
+// ROM sizes
+#define ROM_32KBYTE 0x00 // No rom banking
+#define ROM_64KBYTE 0x01 // 4 banks
+#define ROM_128KBYTE 0x02 // 8 banks
+#define ROM_256KBYTE 0x03 // 16 banks
+#define ROM_512KBYTE 0x04 // 32 banks
+#define ROM_1MBYTE 0x05 // 64 banks - only 63 banks used by MBC1
+#define ROM_2MBYTE 0x06 // 128 banks - only 125 banks used by MBC1
+#define ROM_4MBYTE 0x07 // 256 banks
+#define ROM_1_1MBYTE 0x52 // 72 banks
+#define ROM_1_2MBYTE 0x53 // 80 banks
+#define ROM_1_5MBYTE 0x54 // 96 banks
+// RAM sizes
+#define RAM_None 0x0
+#define RAM_2KBYTE 0x1
+#define RAM_8KBYTE 0x2
+#define RAM_32KBYTE 0x3
+// Destination Code
+#define JAPANESE 0x0
+#define NON_JAPANESE 0x1
 // Bank specific constans
 #define BANK_LENGTH 0x4000
 #define VIDEO_RAM_LENGTH 0x2000

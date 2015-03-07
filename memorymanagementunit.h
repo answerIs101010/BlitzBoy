@@ -1,5 +1,6 @@
 #ifndef ROM_DEFINED
 	#include "rom.h"
+	#define ROM_DEFINED
 #endif
 #include "memorybankcontroller.h"
 
@@ -32,11 +33,14 @@ public:
 
 	// Manage operations
 	int recalculateAddress(int address);
-	int readFromBank(int address);
+	void prepareMemory();
+	void setupRomOnlyMbc();
+	void setupMBC1();
+	void setupMBC2();
+	void setupMBC3();
 
 	// Read operations
-	char readByte(int address);
-	char readShort(int address);
+	int readByte(int address);
 
 	// Write operations
 	bool writeByte(int address, char value);

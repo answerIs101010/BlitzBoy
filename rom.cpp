@@ -19,10 +19,12 @@ bool ROM::loadFile(string path) {
 	setFileStream(new ifstream());
 	fileStream()->open(path.c_str(), ios_base::in | ios_base::binary);
 	if (fileStream()->is_open()) {
+		
 		fileStream()->seekg(0x0100);
 		char headerBytes[HEADER_LENGTH];
 		fileStream()->getline(headerBytes, HEADER_LENGTH);
 		setHeader(new CartridgeHeader(headerBytes));
+
 		fileStream()->close();
 	} else {
 		return false;

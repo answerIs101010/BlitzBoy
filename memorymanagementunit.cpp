@@ -12,8 +12,6 @@ MemoryManagementUnit::~MemoryManagementUnit() {
 
 void MemoryManagementUnit::initialize()
 {
-	MBC()->createMemoryBank(); // 16kb ROM Bank 00 fixed (Cartridge)
-
 	for (int i = 0; i < VIDEO_RAM_LENGTH; i++) {
 		writeVRAMByte(i, 0);
 	}
@@ -39,12 +37,14 @@ void MemoryManagementUnit::initialize()
 	}
 	
 	_interruptEnableRegister = 0;
+
+	
 }
 
 int MemoryManagementUnit::recalculateAddress(int address) {
 }
 
-int MemoryManagementUnit::readFromBank(int address) {
+int MemoryManagementUnit::readByte(int address) {
 	switch(address & 0xF000) {
 		case 0x0000:
 		case 0x1000:
@@ -55,13 +55,14 @@ int MemoryManagementUnit::readFromBank(int address) {
 		case 0x5000:
 		case 0x6000:
 		case 0x7000:
-			return MBC()->memoryBank(MBC()->memoryBankIndex())->readByte(address - 0x4000);
+			return MBC()->memoryBank(1)->readByte(address - 0x4000);
 		case 0x8000:
 		case 0x9000:
+			return _videoRAM[address - 0x8000];
 		case 0xA000:
 		case 0xB000:
 			// Fix External Cartridge RAM :D
-			return MBC()->memoryBank(MBC()->memoryBankIndex())->readByte(address - 0x4000);
+			return MBC()->memoryBank(2)->readByte(address - 0xA000);
 		case 0xC000:
 			return _workRAM1[address - 0xC000];
 		case 0xD000:
@@ -85,77 +86,113 @@ int MemoryManagementUnit::readFromBank(int address) {
 	}
 }
 
-bool MemoryManagementUnit::writeByte(int address, char value)
+void MemoryManagementUnit::prepareMemory() {
+	switch (rom()->cartridgeHeader()->cartridgeType()) {
+		case ROM_ONLY:
+			setupRomOnlyMbc();
+			break;
+		case MBC1:
+		case MBC1_RAM:
+		case MBC1_RAM_BATTERY:
+			setupMBC1();
+			break;
+		case MBC2:
+		case MBC2_BATTERY:
+			setupMBC2();
+			break;
+		case MBC3_TIMER_BATTERY:
+		case MBC3_TIMER_RAM_BATTERY:
+		case MBC3:
+		case MBC3_RAM:
+		case MBC3_RAM_BATTERY:
+			setupMBC3();
+			break;	
+	}
+}
+
+void MemoryManagementUnit::setupMBC1()
 {
+}
+
+void MemoryManagementUnit::setupMBC2()
+{
+}
+
+void MemoryManagementUnit::setupMBC3()
+{
+}
+
+void MemoryManagementUnit::setupRomOnlyMbc()
+{
+	MBC()->createMemoryBank();
+	MBC()->createMemoryBank();
+	rom()->fileStream()->open("cpu_instrs.gb", ios_base::in | ios_base::binary);
+	if (rom()->fileStream()->is_open()) {
+		char bank0[BANK_LENGTH];
+		char bank1[BANK_LENGTH];
+		rom()->fileStream()->getline(bank0, BANK_LENGTH);
+		rom()->fileStream()->getline(bank1, BANK_LENGTH);
+		rom()->fileStream()->close();
+
+		MBC()->memoryBank(0)->fillBank(bank0);
+		MBC()->memoryBank(1)->fillBank(bank1);
+	}
+}
+
+bool MemoryManagementUnit::writeByte(int address, char value) {
 	return true;
 }
 
-bool MemoryManagementUnit::writeShort(int address, short value)
-{
+bool MemoryManagementUnit::writeShort(int address, short value) {
 	return true;
 }
 
-inline void MemoryManagementUnit::writeVRAMByte(int address, char value)
-{
+inline void MemoryManagementUnit::writeVRAMByte(int address, char value) {
 	_videoRAM[address] = value;
 }
-void MemoryManagementUnit::writeHRAMByte(int address, char value)
-{
+
+void MemoryManagementUnit::writeHRAMByte(int address, char value) {
 	_highRAM[address] = value;
 }
 
-void MemoryManagementUnit::writeIOPortsByte(int address, char value)
-{
+void MemoryManagementUnit::writeIOPortsByte(int address, char value) {
 	_ioPorts[address] = value;
 }
 
-void MemoryManagementUnit::writeInterruptEnableRegisterByte(char value)
-{
+void MemoryManagementUnit::writeInterruptEnableRegisterByte(char value) {
 	_interruptEnableRegister = value;
 }
 
-void MemoryManagementUnit::writeSpriteAttributeTableByte(int address, char value)
-{
+void MemoryManagementUnit::writeSpriteAttributeTableByte(int address, char value) {
 	_spriteAttributeTable[address] = value;
 }
 
-void MemoryManagementUnit::writeWRAM1Byte(int address, char value)
-{
+void MemoryManagementUnit::writeWRAM1Byte(int address, char value) {
 	_workRAM1[address] = value;
 }
 
-void MemoryManagementUnit::writeWRAM2Byte(int address, char value)
-{
+void MemoryManagementUnit::writeWRAM2Byte(int address, char value) {
 	_workRAM2[address] = value;
 }
 
-char MemoryManagementUnit::readByte(int address)
-{
+char MemoryManagementUnit::readShort(int address) {
 	return 'a';
 }
 
-char MemoryManagementUnit::readShort(int address)
-{
-	return 'a';
-}
-
-ROM* MemoryManagementUnit::rom()
-{
+ROM* MemoryManagementUnit::rom() {
 	return _rom;
 }
 
-void MemoryManagementUnit::setROM(ROM *Rom)
-{
+void MemoryManagementUnit::setROM(ROM *Rom) {
 	_rom = Rom;
 }
 
-MemoryBankController* MemoryManagementUnit::MBC()
-{
+MemoryBankController* MemoryManagementUnit::MBC() {
 	return _mbc;
 }
 
-void MemoryManagementUnit::setMBC(MemoryBankController *mbc)
-{
+void MemoryManagementUnit::setMBC(MemoryBankController *mbc) {
+
 	_mbc = mbc;
 }
 

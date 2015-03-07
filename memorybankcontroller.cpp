@@ -13,6 +13,16 @@ void MemoryBankController::initialize()
 	
 }
 
+int MemoryBankController::externalRamBankIndex()
+{
+	return _externalRamBankIndex;
+}
+
+void MemoryBankController::setExternalRamBankIndex(int index)
+{
+	_externalRamBankIndex = index;
+}
+
 int MemoryBankController::memoryBankIndex()
 {
 	return _memoryBankIndex;

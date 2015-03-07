@@ -22,3 +22,8 @@ void MemoryBank::setByte(int address, char value)
 	_memory[address] = value;
 }
 
+void MemoryBank::fillBank(char* data)
+{
+	strcpy(_memory, data);
+}
+

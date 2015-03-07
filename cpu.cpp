@@ -22,6 +22,21 @@ void CPU::initialize() {
 	setPC(0x100);	
 }
 
+bool CPU::pauseEmulation()
+{
+	return true;
+}
+
+bool CPU::quitEmulation()
+{
+	return true;
+}
+
+bool CPU::startEmulation()
+{
+	return true;
+}
+
 MemoryManagementUnit * CPU::MMU()
 {
 	return _mmu;
