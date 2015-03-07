@@ -1,2 +1,2 @@
 # BlitzBoy
-First attempt of an emulator written in plain c++. The UI will be implemented in SDL.
+First attempt of a GameBoy emulator written in plain c++. The UI will be implemented in SDL.
